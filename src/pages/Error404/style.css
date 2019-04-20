@@ -1,0 +1,14 @@
+.root {
+  display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: center;
+  align-content: center;
+}
+.image {
+  height: 40vmin;
+}
+#text {
+  font-size: 16px;
+}
