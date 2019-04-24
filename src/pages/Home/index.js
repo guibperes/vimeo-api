@@ -10,11 +10,21 @@ export default class Home extends Component {
     super(props)
     this.state = {
       videos: [],
-      loading: true
+      loading: true,
+      uploadNome: 'Teste 4',
+      uploadDesc: 'api upload'
     }
+    this.fileInputRef = React.createRef()
+    this.listAllVideos = this.listAllVideos.bind(this)
+    this.uploadVideo = this.uploadVideo.bind(this)
   }
 
   componentDidMount () {
+    this.listAllVideos()
+  }
+
+  listAllVideos () {
+    this.setState({ loading: true })
     vimeo.listAll()
       .then(res => {
         this.setState({
@@ -27,6 +37,19 @@ export default class Home extends Component {
       })
   }
 
+  uploadVideo () {
+    let videoData = {
+      path: this.fileInputRef.current.files[0],
+      name: this.state.uploadNome,
+      description: this.state.uploadDesc
+    }
+    vimeo.upload(videoData)
+      .then(() => {
+        this.setState({ uploadNome: '', uploadDesc: '' })
+        this.listAllVideos()
+      })
+  }
+
   render () {
     return (
       <div>
@@ -36,17 +59,23 @@ export default class Home extends Component {
           </div>
         )}
         {!this.state.loading && (
-          <Grid id='container' container spacing={16} direction='row' justify='space-around' alignItems='center'>
+          <Grid id='container' container spacing={8} direction='row' justify='flex-start' alignItems='center'>
             {this.state.videos.map((video, i) => (
-              <Grid key={i} className='item' item xs={3}>
-                <iframe title={i} src={`https://player.vimeo.com/video/${video.link.split('/').slice(-1)}`} frameborder='0' allow='fullscreen' />
+              <Grid key={i} className='item' item xs={4}>
+                {video.upload.status === 'complete' && (
+                  <iframe className='frame' title={i} src={`https://player.vimeo.com/video/${video.link.split('/').slice(-1)}`} frameBorder='0' allow='fullscreen' />
+                )}
+                {video.upload.status !== 'complete' && (
+                  <div className='frame'><Typography className='sending' variant='title' color='primary'>Enviando...</Typography></div>
+                )}
                 <Typography className='title' variant='title' color='inherit'>{video.name}</Typography>
                 <div className='description'><Typography variant='body2' color='inherit'>{video.description}</Typography></div>
               </Grid>
             ))}
           </Grid>
         )}
-        <Fab className='fabBtn' color='primary' aria-label='Adicionar'><AddIcon /></Fab>
+        <Fab className='fabBtn' color='primary' onClick={() => { this.uploadVideo() }}><AddIcon /></Fab>
+        <input ref={this.fileInputRef} type='file' />
       </div>
     )
   }
