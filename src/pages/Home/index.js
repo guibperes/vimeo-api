@@ -17,7 +17,6 @@ export default class Home extends Component {
   componentDidMount () {
     vimeo.listAll()
       .then(res => {
-        console.log(res)
         this.setState({
           loading: false,
           videos: res.data

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { Typography, Button } from '@material-ui/core'
 
 import './style.css'
@@ -10,7 +11,7 @@ export default class Error404 extends Component {
       <div className='root'>
         <img className='image' src={errorSvg} alt='Error Logo' />
         <Typography id='text' variant='overline' color='inherit'>O que você está procurando não está aqui...</Typography>
-        <Button variant='contained' color='primary' href='/'>Voltar</Button>
+        <Link className='link' to='/'><Button variant='contained' color='primary'>Voltar</Button></Link>
       </div>
     )
   }

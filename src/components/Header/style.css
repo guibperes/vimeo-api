@@ -1,3 +1,7 @@
 .grow {
   flex-grow: 1;
 }
+.link {
+  color: #FFF;
+  text-decoration: none;
+}
